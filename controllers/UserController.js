@@ -1,3 +1,5 @@
+var User = require("../models/User");
+
 class UserController {
   async indx(req, res) {}
 
@@ -19,6 +21,8 @@ class UserController {
       res.status(400);
       res.json({ err: "A senha deve conter mais que cinco caracteres!" });
     }
+
+    await User.new(name, email, password);
 
     res.status = 200;
     res.send("Pegando o corpo da requisição!");
