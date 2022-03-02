@@ -3,6 +3,35 @@ var db = require("../database/connection");
 var bcrypt = require("bcrypt");
 
 class User {
+  async findAll() {
+    try {
+      let result = await db
+        .select(["id", "name", "email", "role"])
+        .table("users");
+      return result;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  async findById(id) {
+    try {
+      let result = await db
+        .select(["id", "name", "email", "role"])
+        .where({ id: id })
+        .table("users");
+      if (result.length > 0) {
+        return result[0];
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
   async new(name, email, password, role) {
     try {
       let hash = await bcrypt.hash(password, 10);
