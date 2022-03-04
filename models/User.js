@@ -1,6 +1,7 @@
 // var knex = require("knex");
 var db = require("../database/connection");
 var bcrypt = require("bcrypt");
+const Knex = require("knex");
 
 class User {
   async findAll() {
@@ -86,6 +87,21 @@ class User {
 
       try {
         await db.update(editUser).where({ id: id }).table("users");
+        return { status: true };
+      } catch (error) {
+        return { status: false, err: error };
+      }
+    } else {
+      return { status: false, err: "Usuário não existe!" };
+    }
+  }
+
+  async delete(id) {
+    let user = await this.findById(id);
+
+    if (user != undefined) {
+      try {
+        await db.delete().where({ id: id }).table("users");
         return { status: true };
       } catch (error) {
         return { status: false, err: error };
