@@ -57,6 +57,43 @@ class User {
       return false;
     }
   }
+
+  async update(id, name, email, role) {
+    let user = await this.findById(id);
+
+    if (user != undefined) {
+      let editUser = {};
+
+      if (email != undefined) {
+        if (email != user.email) {
+          let result = await this.findEmail(email);
+
+          if (result == false) {
+            editUser.email = email;
+          } else {
+            return { status: false, err: "E-mail já cadastrado!" };
+          }
+        }
+      }
+
+      if (name != undefined) {
+        editUser.name = name;
+      }
+
+      if (role != undefined) {
+        editUser.role = role;
+      }
+
+      try {
+        await db.update(editUser).where({ id: id }).table("users");
+        return { status: true };
+      } catch (error) {
+        return { status: false, err: error };
+      }
+    } else {
+      return { status: false, err: "Usuário não existe!" };
+    }
+  }
 }
 
 module.exports = new User();
