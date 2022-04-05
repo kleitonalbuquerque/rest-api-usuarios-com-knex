@@ -2,6 +2,7 @@
 var db = require("../database/connection");
 var bcrypt = require("bcrypt");
 const Knex = require("knex");
+const PasswordToken = require("./PasswordToken");
 
 class User {
   async findAll() {
@@ -109,6 +110,13 @@ class User {
     } else {
       return { status: false, err: "Usuário não existe!" };
     }
+  }
+
+  async changePassword(newPassword, id, token) {
+    let hash = await bcrypt.hash(newPassword, 10);
+
+    await db.update({ password: hash }).where({ id: id }).table("users");
+    await PasswordToken.setUSed(token);
   }
 }
 
