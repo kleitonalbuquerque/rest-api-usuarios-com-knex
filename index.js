@@ -1,10 +1,12 @@
-var bodyParser = require("body-parser");
-var express = require("express");
-var app = express();
-var router = require("./routes/routes");
+const bodyParser = require("body-parser");
+const express = require("express");
+const app = express();
+const router = require("./routes/routes");
+const cors = require("cors");
 
 const port = 8686;
 
+app.use(cors());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
