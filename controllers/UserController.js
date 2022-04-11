@@ -27,7 +27,7 @@ class UserController {
     console.log(req.body);
     var { email, name, password, role } = req.body;
 
-    if (email === undefined || email == "") {
+    if (email === undefined || email == "" || email == " ") {
       res.status(400);
       res.json({ err: "O e-mail é iválido!" });
       return;
