@@ -3,7 +3,7 @@ const PasswordToken = require("../models/PasswordToken");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-let secret = "pretitadocoracaos2";
+const secret = "pretitadocoracaos2";
 class UserController {
   async index(req, res) {
     let users = await User.findAll();
@@ -124,15 +124,17 @@ class UserController {
   }
 
   async login(req, res) {
-    let { email, password } = req.body;
+    let { email, password, role } = req.body;
     let userPassword = req.body.password;
     let user = await User.findByEmail(email);
 
     if (user != false) {
       if (password.length > 3 && password === userPassword) {
-        let token = jwt.sign({ email: email, role: user.role }, secret, {
+        let token = jwt.sign({ email: email, role: role }, secret, {
           expiresIn: "1h",
         });
+        console.log("email: ", email);
+        console.log("role: ", role);
         console.log("token: ", token);
         res.status(200);
         res.json({ token: token });
