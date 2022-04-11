@@ -1,5 +1,9 @@
 const User = require("../models/User");
 const PasswordToken = require("../models/PasswordToken");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
+let secret = "pretitadocoracaos2";
 class UserController {
   async index(req, res) {
     let users = await User.findAll();
@@ -41,7 +45,7 @@ class UserController {
       return;
     }
 
-    let emailExists = await User.findEmail(email);
+    let emailExists = await User.findByEmail(email);
 
     if (emailExists) {
       res.status(406);
@@ -116,6 +120,29 @@ class UserController {
     } else {
       res.status(406);
       res.send("Token inválido!");
+    }
+  }
+
+  async login(req, res) {
+    let { email, password } = req.body;
+    let userPassword = req.body.password;
+    let user = await User.findByEmail(email);
+
+    if (user != false) {
+      if (password.length > 3 && password === userPassword) {
+        let token = jwt.sign({ email: email, role: user.role }, secret, {
+          expiresIn: "1h",
+        });
+        console.log("token: ", token);
+        res.status(200);
+        res.json({ token: token });
+      } else {
+        res.status(406);
+        res.send("Senha incorreta!");
+      }
+    } else {
+      res.status(400);
+      res.send("Usuário não existe!");
     }
   }
 }

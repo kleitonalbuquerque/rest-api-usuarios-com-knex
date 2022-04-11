@@ -3,7 +3,7 @@ const User = require("./User");
 
 class PasswordToken {
   async create(email) {
-    let user = await User.findEmail(email);
+    let user = await User.findByEmail(email);
 
     if (user != undefined) {
       try {
@@ -58,7 +58,7 @@ class PasswordToken {
     }
   }
 
-  async setUSed(token) {
+  async setUsed(token) {
     await db
       .update({ used: 1 })
       .where({ token: token })

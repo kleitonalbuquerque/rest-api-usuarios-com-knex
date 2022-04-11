@@ -44,7 +44,7 @@ class User {
     }
   }
 
-  async findEmail(email) {
+  async findByEmail(email) {
     try {
       let result = await db.select("*").from("users").where({ email: email });
       console.log(result);
@@ -68,7 +68,7 @@ class User {
 
       if (email != undefined) {
         if (email != user.email) {
-          let result = await this.findEmail(email);
+          let result = await this.findByEmail(email);
 
           if (result == false) {
             editUser.email = email;
@@ -116,7 +116,7 @@ class User {
     let hash = await bcrypt.hash(newPassword, 10);
 
     await db.update({ password: hash }).where({ id: id }).table("users");
-    await PasswordToken.setUSed(token);
+    await PasswordToken.setUsed(token);
   }
 }
 
