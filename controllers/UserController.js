@@ -29,7 +29,7 @@ class UserController {
 
     if (email === undefined || email == "" || email == " ") {
       res.status(400);
-      res.json({ err: "O e-mail é iválido!" });
+      res.json({ err: "O e-mail é inválido!" });
       return;
     }
 
@@ -49,7 +49,7 @@ class UserController {
 
     if (emailExists) {
       res.status(406);
-      res.json({ err: "O e-mail já está cadasttrado!" });
+      res.json({ err: "O e-mail já está cadastrado!" });
       return;
     }
 
